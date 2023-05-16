@@ -1,0 +1,96 @@
+<app-add-brother (addBrother)="onAdd($event)"></app-add-brother>
+
+<app-filter-user (sendFilter)="onFilter($event)"></app-filter-user>
+
+<app-import-exel-file (exelData)="onAddExel($event)"></app-import-exel-file>
+
+<div class="container">
+    <p-table 
+        [paginator]="true"
+        [rows]="4" 
+        [value]="brothers">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th>Name</th>
+                <th>Job</th>
+                <th>Age</th>
+                <th>Date</th>
+                <th style="width: 21rem">
+                    Actions
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-brother>
+            <tr>
+                <td>{{ brother.name }}</td>
+                <td>{{ brother.job }}</td>
+                <td>{{ brother.age }}</td>
+                <td>{{ brother.date }}</td>
+                <td>
+                    <p-button 
+                        (onClick)="generate(brother._id)"
+                        icon="pi pi-code" 
+                        styleClass="p-button-success"
+                        [style]="{ 'margin-right': '.5em' }">
+                    </p-button>
+                    <p-button 
+                        (onClick)="createPDF(brother)"
+                        icon="pi pi-file-pdf" 
+                        styleClass="p-button-danger"
+                        [style]="{ 'margin-right': '.5em' }">
+                    </p-button>
+                    <p-button 
+                        (onClick)="updateTransfer(brother)"
+                        icon="pi pi-eye" 
+                        styleClass="p-button-primery"
+                        data-bs-toggle="modal" 
+                        data-bs-target="#userInfo"
+                        [style]="{ 'margin-right': '.5em' }">
+                    </p-button>
+                    <p-button 
+                        (onClick)="updateTransfer(brother)"
+                        icon="pi pi-pencil" 
+                        styleClass="p-button-warning"
+                        data-bs-toggle="modal" 
+                        data-bs-target="#exampleModal"
+                        [style]="{ 'margin-right': '.5em' }">
+                    </p-button>
+                    <p-button 
+                        icon="pi pi-trash" 
+                        styleClass="p-button-danger"
+                        data-bs-toggle="modal" 
+                        data-bs-target="#deleteModal"
+                        (click)="updateTransfer(brother)"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="summary">
+            <div style="text-align:left">
+                <p-button 
+                    icon="pi pi-refresh" 
+                    label="Reload"
+                    (click)="ngOnInit()">
+                </p-button>
+            </div>
+
+            <p-button 
+                class="float-end"
+                icon="pi pi-download" 
+                label="Download"
+                (click)="onDownload()">
+        </p-button>
+        </ng-template>
+
+
+    </p-table>
+</div>
+
+<app-update-brother (updateData)="onUpdate($event)" (uploadImage)="uploadImage($event)"></app-update-brother>
+
+<app-delete-brother (deleteEmit)="onDelete($event)"></app-delete-brother>
+
+<app-user-info [brothers]="brothers"></app-user-info>
+
+<!--Success And Error Message-->
+<p-toast></p-toast>
+

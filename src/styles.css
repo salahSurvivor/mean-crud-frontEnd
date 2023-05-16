@@ -1,1 +1,93 @@
-/* You can add global styles to this file, and also import other style files */
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeicons/primeicons.css";
+
+form, table{
+    margin: 25px auto;
+    width: 350px;
+}
+
+.form-edit{
+    margin: auto;
+    width: auto;
+}
+
+h3{
+    margin: 25px 0;
+}
+
+.edit-radio{
+    display: inline-block;
+    margin: 0 10px 12px 0;
+}
+
+.img-user-info{
+    width: 200px;
+    height: 200px;
+}
+
+.filtersInput{
+    display: inline;
+    margin: 0 25px;
+}
+
+.edit-btn{
+    width: auto;
+    margin: 0 18px; 
+}
+
+.p-input-icon-left{
+    margin: 0 5px;
+}
+
+.edit-input-text{
+    display: inline;
+    width: 40%;
+    margin: 0 25px;
+}
+
+.import-exel{
+    margin: 10px auto;
+}
+
+
+.table{
+    margin: 100px auto 0 auto;
+}
+
+.register-form{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(70, 86, 169, 1) 31%, rgba(0, 125, 216, 1) 100%);
+}
+
+.register-form form{
+    margin: 130px auto;
+    border-radius: 8px;
+    width: 400px;
+    padding: 30px 20px 50px 20px;
+    background: #fff;
+}
+
+.register-form .input-text{
+    margin: 25px 0;
+}
+
+.register-form .input-text input{
+    width: 350px;
+}
+
+.register-form input.btn.btn-primary {
+    margin: 0 8px;
+    width: 330px;
+    border-radius: 5px;
+}
+
+.p-button{
+    font-size: 0.9em;  
+  }
+
+.edit-register-btn{
+    margin: 16px;
+}  

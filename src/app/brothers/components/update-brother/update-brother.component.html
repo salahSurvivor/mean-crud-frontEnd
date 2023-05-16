@@ -1,0 +1,115 @@
+<!--Update Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Update Brother</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form 
+              class="form-edit"
+              [formGroup]="validateForm">
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Name</span>
+                    <input 
+                      type="text" class="form-control" 
+                      placeholder="name" 
+                      name="name" 
+                      [(ngModel)]="name"
+                      formControlName="name" 
+                      required/>
+                </div>
+
+                <div class="form-text text-danger" *ngIf="Name.touched || Name.dirty">
+                  <p *ngIf="Name.errors?.['required']">Name Is Required</p>
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Job</span>
+                    <input 
+                      type="text" 
+                      class="form-control" 
+                      placeholder="job" 
+                      name="job" 
+                      [(ngModel)]="job"
+                      formControlName="job"
+                      required/>
+                </div>
+
+                <div class="form-text text-danger" *ngIf="Job.touched || Job.dirty">
+                  <p *ngIf="Job.errors?.['required']">Job Is Required</p>
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Age</span>
+                    <input 
+                      type="text" 
+                      class="form-control" 
+                      placeholder="age" 
+                      name="age" 
+                      [(ngModel)]="age"
+                      formControlName="age"
+                      required/>
+                </div>
+
+                <div class="form-text text-danger" *ngIf="Age.touched || Age.dirty">
+                  <p *ngIf="Age.errors?.['required']">Age Is Required</p>
+                  <p *ngIf="Age.errors?.['pattern']">Please Provide A Valide Age</p>
+                </div>
+              </form>      
+                <div class="mb-3">
+                  <input 
+                    class="form-control" 
+                    type="file" 
+                    accept="image/png, image/gif, image/jpeg"
+                    id="formFile" 
+                    [(ngModel)]="img" 
+                    (change)="handleImage($event)"
+                    name="image" 
+                    />
+                </div>
+
+              <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">
+                      <i class="pi pi-calendar"></i>
+                  </span>
+                  <p-calendar 
+                    [(ngModel)]="date" 
+                    [placeholder]="date"
+                    name="date"></p-calendar>
+              </div>
+          
+              <div class="flex edit-radio align-items-center">
+                  <p-radioButton 
+                    name="gender" 
+                    value="Men" 
+                    [(ngModel)]="gender" 
+                    inputId="ingredient1"
+                    ></p-radioButton>
+                  <label for="ingredient1" class="ml-2">Men</label>
+              </div>    
+              <div class="flex edit-radio align-items-center">
+                  <p-radioButton 
+                    name="gender" 
+                    value="Women" 
+                    [(ngModel)]="gender" 
+                    inputId="ingredient2"
+                    ></p-radioButton>
+                  <label for="ingredient2" class="ml-2">Women</label>
+              </div><br />
+        </div>          
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button 
+            (click)="onUpdate()"
+            type="button" 
+            class="btn btn-success"
+            data-bs-dismiss="modal"
+            [disabled]="validateForm.invalid">Save changes</button>
+        </div>
+      
+      </div>
+    </div>
+  </div>

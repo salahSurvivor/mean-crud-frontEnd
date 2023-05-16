@@ -1,0 +1,31 @@
+<div class="register-form">
+    <form (ngSubmit)="onSubmit()">
+        <div class="input-text">
+            <input 
+            type="text"
+            placeholder="Name"
+            name="name"
+            pInputText [(ngModel)]="name" />
+        </div>
+
+        <div class="input-text">
+            <input 
+            type="text"
+            placeholder="Email"
+            name="email"
+            pInputText [(ngModel)]="email" />
+        </div>
+
+        <div class="input-text">
+            <input 
+            type="password"
+            placeholder="Password"
+            name="password"
+            pInputText [(ngModel)]="password" /> 
+        </div>
+
+        <input type="submit" value="Register" class="btn btn-primary" />
+    </form>
+</div>
+
+<p-toast></p-toast>

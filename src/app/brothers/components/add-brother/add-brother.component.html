@@ -1,0 +1,121 @@
+<h3 class="text-center">Employees</h3>
+
+<form
+    [formGroup]="validateForm"
+    method="post" 
+    enctype="multipart/form-data">
+
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Name</span>
+        <input 
+            type="text" 
+            class="form-control" 
+            placeholder="name" 
+            name="name"
+            formControlName="nameForm"
+            [(ngModel)]="name" 
+            required />    
+    </div>
+    <div class="form-text text-danger" *ngIf="Name.touched || Name.dirty">
+        <p *ngIf="Name.errors?.['required']">Name Is Required</p>
+    </div> 
+
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Job</span>
+        <input 
+            type="text" 
+            class="form-control" 
+            placeholder="job" 
+            name="job" 
+            [(ngModel)]="job"
+            formControlName="jobForm"
+            required/>
+    </div>
+
+    <div class="form-text text-danger" *ngIf="Job.touched || Job.dirty">
+        <p *ngIf="Job.errors?.['required']">Job Is Required</p>
+    </div>
+
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">Age</span>
+        <input 
+            type="text"
+            class="form-control" 
+            placeholder="age"
+            name="age" 
+            [(ngModel)]="age"
+            formControlName="ageForm"
+            required/> 
+    </div>
+
+    <div class="form-text text-danger" *ngIf="Age.touched || Age.dirty">
+        <p *ngIf="Age.errors?.['required']">Age Is Reqiured</p>
+        <p *ngIf="Age.errors?.['pattern']">Please Provide A Valide Age</p>
+        <!--p *ngIf="Age.errors?.['max']">3la nta ba9i hay</p-->
+    </div>
+
+    <div class="mb-3">
+        <input 
+            class="form-control" 
+            type="file"
+            accept="image/png, image/gif, image/jpeg"
+            id="formFile" 
+            (change)="selectFile($event)"
+            [(ngModel)]="img2"
+            name="image"
+            formControlName="imageForm" 
+            required/>
+    </div>
+
+    <div class="form-text text-danger" *ngIf="Image.touched || Image.dirty">
+        <p *ngIf="Image.errors?.['required']">Image Is Required</p>
+    </div>
+
+    <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">
+            <i class="pi pi-calendar"></i>
+        </span>
+        <p-calendar 
+            [(ngModel)]="date"
+            name="date"
+            formControlName="dateForm"
+            ></p-calendar>
+    </div>
+
+    <div class="form-text text-danger" *ngIf="Date.touched || Date.dirty">
+        <p *ngIf="Date.errors?.['required']">Date Is Required</p>
+    </div>
+
+    <div class="flex edit-radio align-items-center">
+        <p-radioButton 
+            name="gender" 
+            value="Men" 
+            [(ngModel)]="gender" 
+            inputId="ingredient1"
+            formControlName="gender"></p-radioButton>
+        <label for="ingredient1" class="ml-2">Men</label>
+    </div>   
+
+    <div class="flex edit-radio align-items-center">
+        <p-radioButton 
+            name="gender" 
+            value="Women" 
+            [(ngModel)]="gender" 
+            inputId="ingredient2"
+            formControlName="gender"></p-radioButton>
+        <label for="ingredient2" class="ml-2">Women</label>
+    </div>
+    
+    <div class="form-text text-danger" *ngIf="Gender.touched || Gender.dirty">
+        <p *ngIf="Gender.errors?.['required']">Gender Is Required</p>
+    </div>
+    <br>
+
+
+    <input 
+        type="submit" 
+        class="btn btn-success" 
+        value="Add" 
+        (click)="onAdd()"
+        [disabled]="validateForm.invalid" />
+</form>

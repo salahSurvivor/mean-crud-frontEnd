@@ -1,0 +1,29 @@
+<div class="container import-exel">
+    <button
+        [class]="show ? 'btn btn-danger' : 'btn btn-success'"
+        type="text"
+        (click)="toggleShow()">
+        {{ show ? 'Close' : 'Import' }}
+    </button> 
+
+    <div 
+        class="import-section filtersInput" 
+        *ngIf="show">
+
+        <input 
+            class="form-control edit-input-text"
+            type="file" 
+            [(ngModel)]="text"
+            (change)="readExcel($event)"
+            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+        />
+
+        <input 
+            class="btn btn-success" 
+            type="button"
+            value="Apply"
+            (click)="onAdd()"
+        />
+    </div>
+</div>
+   

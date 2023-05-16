@@ -1,0 +1,83 @@
+<div class="contact-us">
+
+    <div class="form">
+        <form>
+            <div class="card-input">
+                <label class="contact-label">Email :</label> 
+                <div class="card contact-input">
+                    <input 
+                        type="text"
+                        placeholder="Email"
+                        name="email"
+                        pInputText [(ngModel)]="email" />
+                </div>
+            </div>
+
+            <div class="card-input">
+                <label class="contact-label">Subject :</label> 
+                <div class="card contact-input">
+                    <input type="text"
+                    placeholder="Subject" 
+                    name="subject"
+                    pInputText [(ngModel)]="subject" />
+                </div>
+            </div>
+
+            <div class="card-input">
+                <label class="contact-label">Message :</label> 
+                <textarea rows="5" 
+                    cols="30"
+                    placeholder="Message" 
+                    name="text"
+                    [(ngModel)]="text"
+                    pInputTextarea [autoResize]="true"></textarea>
+            </div>
+
+            <input 
+                (click)="onSend()"
+                type="button"
+                class="btn btn-primary" 
+                value="Send"/>
+        </form>
+    </div>
+</div>
+
+<p-toast></p-toast>
+
+
+<style>
+    .contact-us{
+        background: linear-gradient(180deg, rgba(70, 86, 169, 1) 31%, rgba(0, 125, 216, 1) 100%);
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .form{
+        width: 350px;
+        background: #fff;
+        margin: 50px auto;
+        padding: 22px;
+        border-radius: 12px;
+    }
+
+    .p-inputtext {
+        margin: 14px 0;
+        width: 294px;
+    }
+
+    .contact-label{
+        margin: 0px 25px;
+    }
+
+    .contact-label, .contact-input{
+        display: inline;
+    }
+
+    .btn-primary{
+        margin: 0 15px;
+        width: 260px;
+    }
+</style>

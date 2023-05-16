@@ -1,0 +1,55 @@
+<div class="container">
+  <!-- Button trigger modal -->
+  <button 
+    type="button" 
+    [class]="toggleFilter ? 'btn btn-danger' : 'btn btn-primary'" 
+    (click)="toggleButton()">
+    {{ toggleFilter ? 'Close' : 'Filter' }}
+  </button>
+
+  <div class="filtersInput" *ngIf="toggleFilter">
+
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input 
+        type="text"
+        placeholder="Search By Name"
+        pInputText
+        [(ngModel)]="nameFilter"/>
+    </span>
+
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input 
+      type="text"
+      placeholder="Search By Job"
+      pInputText
+      [(ngModel)]="jobFilter"/>  
+    </span>
+
+    <span class="p-input-icon-left">
+      <i class="pi pi-search"></i>
+      <input 
+      type="text"
+      placeholder="Search By Age"
+      pInputText
+      [(ngModel)]="ageFilter"/>  
+    </span>
+
+    <p-calendar 
+      placeholder="Filter By Date"
+      name="date2"
+      [(ngModel)]="dateFilter"
+    ></p-calendar>
+
+    <input 
+      type="button" 
+      value="Apply" 
+      class="btn btn-success edit-btn" 
+      (click)="onFilter()"/>
+
+  </div>
+
+  
+</div>
+
