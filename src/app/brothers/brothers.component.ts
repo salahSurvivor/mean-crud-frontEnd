@@ -32,9 +32,7 @@ export class BrothersComponent {
               private messageService: MessageService,
               private router: Router,
               private auto: UserService)
-  {
-    this.iCanEnter();
-  }
+  {}
 
   ngOnInit(){
     this.brothersService
@@ -172,15 +170,5 @@ export class BrothersComponent {
     doc.save('table.pdf');
   }
 
-  /*************Autentification Function**********************/
-  iCanEnter(): boolean{
-    if(this.auto.isAuthenticated()){
-      this.router.navigate(['/']);
-      return true;
-    }
-    else{
-      this.router.navigate(['/login'])
-      return false;
-    }
-  }
+ 
 }

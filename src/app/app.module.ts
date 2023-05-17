@@ -38,24 +38,28 @@ import { JwtHelperService, JWT_OPTIONS  } from '@auth0/angular-jwt';
 import { ReadUserComponent } from './users/read-user/read-user.component';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { Page404Component } from './page404/page404.component';
-
+import { LoginGuard } from './guards/login.guard';
+import { IsAdminGuard } from './guards/is-admin.guard';
 
 const appRoutes: Routes = [
   {
     path: '',
-    component: BrothersComponent
+    component: BrothersComponent,
+    canActivate: [LoginGuard]
   },
   {
     path: 'contact',
     component: ContactComponent,
+    canActivate: [LoginGuard]
   },
   {
     path: 'users',
-    component: ReadUserComponent
+    component: ReadUserComponent,
+    canActivate: [LoginGuard, IsAdminGuard]
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
   },
   {
     path: 'register',

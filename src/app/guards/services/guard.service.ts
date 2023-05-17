@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { UserServiceService } from '../../services/user-service.service';
-import { users } from '../../user';
-
+import { HttpClient } from '@angular/common/http';
+import { UserServiceService } from 'src/app/users/services/user-service.service';
+import { users } from 'src/app/users/user';
 @Injectable({
   providedIn: 'root'
 })
-export class UserService {
+export class GuardService {
   private readonly apiUrl = 'http://localhost:3000/';
   items: any;
   admin2: boolean = false;
@@ -36,11 +35,9 @@ export class UserService {
     return !this.jwtHelper.isTokenExpired(token);
   }
 
-  isAdmin(data){
-    this.adminId.map((vl) => {
-      if(vl.name === data.name){}
-        //localStorage.setItem('admin', 'true');
-    });
+  isAdmin(): boolean{
+    const decodeToken = this.jwtHelper.decodeToken(localStorage.getItem('token'));
+    return decodeToken.isAdmin;
   }
 
 }

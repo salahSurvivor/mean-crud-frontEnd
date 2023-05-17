@@ -20,7 +20,6 @@ export class ContactComponent {
               private auten: UserService,
               private router: Router)
   {
-    this.iCanEnter();
   }
 
   onSend(): void{

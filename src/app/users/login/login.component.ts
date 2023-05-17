@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { Router, CanActivate } from '@angular/router';
-import { UserService } from './services/user.service';
+import { GuardService } from 'src/app/guards/services/guard.service';
 import { MessageService } from 'primeng/api';
+import { ToggleModalService } from 'src/app/services/toggle-modal.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -13,9 +14,10 @@ export class LoginComponent {
   password: string;
 
   constructor(
-    private readonly router: Router,
-    private readonly authService: UserService,
-    private messageService: MessageService
+    private readonly authService: GuardService,
+    private messageService: MessageService,
+    private toggle: ToggleModalService,
+    private router: Router
   ){}
 
   onLogin():void{
@@ -24,30 +26,17 @@ export class LoginComponent {
       password: this.password
     }
 
-    this.authService.isAdmin(data);
-    console.log(this.authService.admin());
     this.authService.login(data).subscribe(
       todos => {
         localStorage.setItem('token', todos.token);
-        this.canActivate();
+        this.router.navigate(['/']);  
       },
       error =>{
         this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Username Or Password Is Wrong!!' });
         this.authService.logout();
-        this.canActivate();
         console.log(error.message);
       },
     );
-
   }
 
-  canActivate(): boolean {
-    if (this.authService.isAuthenticated()){
-      this.router.navigate(['/']);
-      return true;
-    }else{
-      this.router.navigate(['/login']);
-      return false;
-    }
-  }
 }

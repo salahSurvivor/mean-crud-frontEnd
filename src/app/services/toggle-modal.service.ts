@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
-import { Brothers } from '../brothers/shared/brothers';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +9,11 @@ export class ToggleModalService {
 
   constructor() { }
 
-  updateModal(data: Brothers){
+  updateModal(data: any){
     this.subject.next(data); 
   }
 
-  onUpdateModal(): Observable<Brothers>{
+  onUpdateModal(): Observable<any>{
     return this.subject.asObservable(); 
   }
 }
