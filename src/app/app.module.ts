@@ -68,6 +68,10 @@ const appRoutes: Routes = [
   {
     path: 'page404',
     component: Page404Component
+  },
+  {
+    path: '**',
+    component: Page404Component
   }
 ] 
 

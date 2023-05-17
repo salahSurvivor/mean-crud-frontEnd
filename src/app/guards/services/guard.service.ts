@@ -22,12 +22,11 @@ export class GuardService {
   }
 
   login(data){
-    return this.http.post<{ token: string }>(this.apiUrl + 'login', data);
+    return this.http.post<{token : string}>(this.apiUrl + 'login', data);
   }
 
   logout() {
     localStorage.removeItem('token');
-    localStorage.removeItem('admin');
   }
 
   isAuthenticated(): boolean {

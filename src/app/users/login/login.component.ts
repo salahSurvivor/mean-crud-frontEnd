@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { GuardService } from 'src/app/guards/services/guard.service';
 import { MessageService } from 'primeng/api';
-import { ToggleModalService } from 'src/app/services/toggle-modal.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,7 +15,6 @@ export class LoginComponent {
   constructor(
     private readonly authService: GuardService,
     private messageService: MessageService,
-    private toggle: ToggleModalService,
     private router: Router
   ){}
 
@@ -32,11 +30,11 @@ export class LoginComponent {
         this.router.navigate(['/']);  
       },
       error =>{
-        this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Username Or Password Is Wrong!!' });
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: error.error.message});
         this.authService.logout();
-        console.log(error.message);
       },
     );
+    
   }
 
 }

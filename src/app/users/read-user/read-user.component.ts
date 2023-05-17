@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { UserServiceService } from '../services/user-service.service';
 import { users } from '../user';
 import { MessageService } from 'primeng/api';
-import { GuardService } from 'src/app/guards/services/guard.service';
 
 @Component({
   selector: 'app-read-user',
@@ -14,9 +13,8 @@ export class ReadUserComponent {
   checked: boolean;
 
   constructor(private userService: UserServiceService,
-              private messageService: MessageService, private guard: GuardService
-  ){
-    console.log(this.guard.isAdmin());}
+              private messageService: MessageService
+  ){}
 
   ngOnInit(): void{
     this.userService.onRead()
