@@ -40,6 +40,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 import { Page404Component } from './page404/page404.component';
 import { LoginGuard } from './guards/login.guard';
 import { IsAdminGuard } from './guards/is-admin.guard';
+import { LocationComponent } from './location/location.component';
 
 const appRoutes: Routes = [
   {
@@ -70,6 +71,10 @@ const appRoutes: Routes = [
     component: Page404Component
   },
   {
+    path: 'location',
+    component: LocationComponent
+  },
+  {
     path: '**',
     component: Page404Component
   }
@@ -90,6 +95,7 @@ const appRoutes: Routes = [
     RegisterComponent,
     ReadUserComponent,
     Page404Component,
+    LocationComponent,
   ],
   imports: [
     BrowserModule,
