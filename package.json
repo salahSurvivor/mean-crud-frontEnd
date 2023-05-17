@@ -24,6 +24,7 @@
     "@types/node": "^18.16.3",
     "ajv": "^8.12.0",
     "angular-jwt": "github:auth0/angular-jwt",
+    "bcrypt": "^5.1.0",
     "bootstrap": "^5.2.3",
     "exceljs": "^4.3.0",
     "file-saver": "^2.0.5",
