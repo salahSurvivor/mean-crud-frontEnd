@@ -1,0 +1,691 @@
+<app-header></app-header>
+
+<h3 class="container">Voyage</h3>
+
+<!------------On List-------------->
+<div *ngIf="onList" class="container onList">
+    <div class="title">
+        <h3></h3>
+    </div>
+    <div class="title actions">
+        <div class="add">
+            <img 
+                (click)="switchOnAdd()"
+                src="https://cloud.digiparc.com/assets/icon40/add.svg"
+                alt="add" />
+        </div>
+        <div class="reload">
+           <img 
+                (click)="ngOnInit()"
+                src="https://cloud.digiparc.com/assets/icon40/refresh.svg" alt="reload" />
+        </div>
+    </div>
+    <p-table 
+        [value]="mix"    
+        [paginator]="true"     
+        [rows]="4"
+        [tableStyle]="{ 'min-width': '50rem' }">
+        <ng-template pTemplate="header">
+            <tr>
+                <th></th>
+                <th>Numero</th>
+                <th>Date Création</th>
+                <th>Date Départ</th>
+                <th>Client</th>
+                <th>Reference</th>
+                <th>Cmr</th>
+                <th>commentaire</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-mix>
+            <tr>
+                <td class="actions-container">
+                    <i  (click)="toggleActions(mix._id)"
+                        class="pi pi-ellipsis-v" style="font-size: 1rem"></i>
+                    <div *ngIf="mix.menu"  
+                        class="menu-actions">
+                        <div (click)="showExpDetail(mix.expediteur)" data-bs-toggle="modal" data-bs-target="#showExp">
+                            <i class="pi pi-eye text-primary" style="font-size: 1rem"></i>
+                            <label>Expediteur</label>
+                        </div>
+                        <div (click)="switchOnUpdate(mix)">
+                            <i class="pi pi-pencil text-success" style="font-size: 1rem"></i>
+                            <label>Update</label>
+                        </div>
+                        <div  (click)="getId(mix._id)" data-bs-toggle="modal" data-bs-target="#deleteModel">
+                            <i class="pi pi-trash text-danger" style="font-size: 1rem"></i>
+                            <label>Delete</label>
+                        </div>
+                    </div>
+                </td>
+                <td>{{ mix.numero }}</td>
+                <td>{{ mix.dateC }}</td>
+                <td>{{ mix.dateD }}</td>
+                <td>{{ mix.client }}</td>
+                <td>{{ mix.reference }}</td>
+                <td>{{ mix.cmr }}</td>
+                <td>{{ mix.cmtr }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<!------------On Add-------------->
+<div *ngIf="onAdd" class="container onAdd">
+    <p-accordion [activeIndex]="0">
+        <p-accordionTab header="Informations générales">
+            <div class="add-trajet">
+                <h4>Désignation du trajet</h4>
+                <div class="input-row">
+                    <span class="row">
+                        <label>Numéro</label>
+                        <input id="disabled-input" type="text" pInputText [disabled]="true" />
+                    </span>
+                    <span class="row">
+                        <label>Date création</label>
+                        <p-calendar [(ngModel)]="dateC" [readonlyInput]="true"></p-calendar>
+                    </span>
+                    <span class="row">
+                        <label>Date départ</label>
+                        <p-calendar [(ngModel)]="dateD" [readonlyInput]="true"></p-calendar>
+                    </span>
+                </div>
+                
+                <div class="input-row input-row-edit">
+                    <span class="row row1-edit">
+                        <label>Clients</label>
+                        <p-dropdown 
+                            class="calendar"
+                            [options]="clients" 
+                            [(ngModel)]="client" 
+                            optionLabel="name">
+                        </p-dropdown>
+                    </span>
+                    <span class="row2-edit">
+                        <label class="button">
+                            <i class="pi pi-plus text-successs"
+                               style="font-size: 1rem"
+                               data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
+                        </label>
+                    </span>
+
+                    <span class="row">
+                        <label>reference</label>
+                        <input type="text" pInputText [(ngModel)]="reference" />
+                    </span>
+                    <span class="row">
+                        <label>cmr</label>
+                        <input type="text" pInputText [(ngModel)]="cmr" />
+                    </span>
+                </div>
+
+                <div class="input-row">
+                    <span class="row">
+                        <label>Embarquement</label>
+                        <div class="check-box">
+                            <input type="checkbox"
+                                   [(ngModel)]="bool1" />
+                        </div>
+                    </span>
+                    <span class="row">
+                        <label>Taxation</label>
+                        <div class="check-box">
+                            <input type="checkbox" 
+                                   [(ngModel)]="bool2"/>
+                        </div>
+                    </span>
+                </div>
+
+                <div class="input-row">
+                    <span class="row row-edit">
+                        <label>Commentaire</label><br>
+                        <textarea 
+                            [(ngModel)]="cmtr"
+                            rows="5" 
+                            cols="80" 
+                            pInputTextarea [autoResize]="true"></textarea>
+                    </span>
+                </div>
+            </div>
+        </p-accordionTab>
+        <p-accordionTab header="Expéditeur / Destinataire">
+            <div class="title">
+                <h3></h3>
+            </div>
+            <div class="title actions">
+                <div class="add" (click)="addExp()">
+                    <img  src="https://cloud.digiparc.com/assets/icon40/add.svg" alt="add">
+                </div>
+            </div>
+            <table class="table-input">
+                <thead>
+                    <tr>
+                        <th>Expediteur</th>
+                        <th>Destinataire</th>
+                        <th>Date Chargement</th>
+                        <th>Retard Chargement</th>
+                        <th>Retard Déchargement</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let exp of expTable">
+                        <td>
+                            <label *ngIf="exp.menu">
+                                <p-dropdown 
+                                    class="calendar"
+                                    [options]="clients" 
+                                    [(ngModel)]="expediteurU" 
+                                    optionLabel="name">
+                                </p-dropdown>
+                            </label>
+                            <label *ngIf="!exp.menu">
+                                {{ exp.exp }}
+                            </label>
+                        </td>
+                        <td>
+                            <label *ngIf="exp.menu">    
+                                <p-dropdown 
+                                    class="calendar"
+                                    [options]="clients" 
+                                    [(ngModel)]="destinateurU" 
+                                    optionLabel="name">
+                                </p-dropdown>
+                            </label>
+                            <label *ngIf="!exp.menu">
+                                {{ exp.dest }}
+                            </label>
+                        </td>
+                        <td>
+                            <label *ngIf="exp.menu">
+                                <p-calendar [(ngModel)]="dateChargementPU" [readonlyInput]="true"></p-calendar>
+                            </label>
+                            <label *ngIf="!exp.menu">
+                                {{ exp.dc }}
+                            </label>
+                        </td>
+                        <td>
+                            <label *ngIf="exp.menu">
+                                <input type="text" pInputText [(ngModel)]="retardChargementU" />
+                            </label>
+                            <label *ngIf="!exp.menu">
+                                {{ exp.rc }}
+                            </label>
+                        </td>
+                        <td>
+                            <label *ngIf="exp.menu">
+                                <input type="text" pInputText [(ngModel)]="retardDeChargementU" />
+                            </label>
+                            <label *ngIf="!exp.menu">
+                                {{ exp.rd }}
+                            </label>
+                        </td>
+                        <td>
+                            <div class="actions-exp">
+                                <i 
+                                    (click)="deleteExp(exp.id)"
+                                    class="pi pi-trash text-danger"
+                                    style="font-size: 1.1rem"></i>
+                            </div>
+                            <div class="actions-exp">
+                                <i  
+                                    *ngIf="!exp.menu"
+                                    (click)="updateExp(exp)"
+                                    class="pi pi-file-edit text-success" style="font-size: 1.1rem"></i>
+                                
+                                <i  
+                                    *ngIf="exp.menu"
+                                    (click)="onUpdateExp(exp)"
+                                    class="pi pi-check text-success" style="font-size: 1.1rem"></i>    
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="input">
+                        <td>
+                            <span class="input-grid">  
+                                <p-dropdown 
+                                    class="calendar"
+                                    [options]="clients" 
+                                    [(ngModel)]="expediteur" 
+                                    optionLabel="name">
+                                </p-dropdown>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="input-grid">  
+                                <p-dropdown 
+                                    class="calendar"
+                                    [options]="clients" 
+                                    [(ngModel)]="destinateur" 
+                                    optionLabel="name">
+                                </p-dropdown>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="input-grid"> 
+                                <p-calendar [(ngModel)]="dateChargementP" [readonlyInput]="true"></p-calendar>
+                            </span>  
+                        </td>
+                        <td>
+                            <span class="input-grid"> 
+                                <input type="text" pInputText [(ngModel)]="retardChargement" />
+                            </span>
+                        </td>
+                        <td>
+                            <span class="input-grid"> 
+                                <input type="text" pInputText [(ngModel)]="retardDeChargement" />
+                            </span>
+                        </td>
+                        <td>
+                            <div class="actions-exp">
+                                <i 
+                                    (click)="deleteExp(4)"
+                                    class="pi pi-trash text-danger"
+                                    style="font-size: 1.1rem"></i>
+                            </div>
+                            <div class="actions-exp">
+                                <i  
+                                    (click)="addTable()"
+                                    [class]="input ? 'pi pi-check text-success' : 'pi pi-file-edit text-success'" style="font-size: 1.1rem"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </p-accordionTab>
+    </p-accordion>
+
+
+    <div class="addVoyage">
+        <input 
+            (click)="addVoyage()"
+            type="button" value="Enregistrer Et Ajouter"
+            class="btn btn-primary float-end ms-4" />
+    </div>
+
+    <!----------------Modal Add Client Start------------------->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Client</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input 
+                    type="text"
+                    class="client-input"
+                    placeholder="Name" 
+                    pInputText [(ngModel)]="clnt" />
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button 
+                (click)="addClient()"
+                type="button"
+                class="btn btn-success" 
+                data-bs-dismiss="modal">Add</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    <!----------------Modal Add Client End------------------->
+
+</div>
+
+<!------------On Update-------------->
+<div *ngIf="onUpdate" class="container onAdd">
+    <p-accordion [activeIndex]="0">
+        <p-accordionTab header="Informations générales">
+            <div class="add-trajet">
+                <h4>Désignation du trajet</h4>
+                <div class="input-row">
+                    <span class="row">
+                        <label>Numéro</label>
+                        <input id="disabled-input" type="text" pInputText [disabled]="true" />
+                    </span>
+                    <span class="row">
+                        <label>Date création</label>
+                        <p-calendar [(ngModel)]="dateC" [readonlyInput]="true"></p-calendar>
+                    </span>
+                    <span class="row">
+                        <label>Date départ</label>
+                        <p-calendar [(ngModel)]="dateD" [readonlyInput]="true"></p-calendar>
+                    </span>
+                </div>
+                
+                <div class="input-row input-row-edit">
+                    <span class="row row1-edit">
+                        <label>Clients</label>
+                        <p-dropdown 
+                            class="calendar"
+                            [options]="clients" 
+                            [(ngModel)]="client" 
+                            optionLabel="name">
+                        </p-dropdown>
+                    </span>
+                    <span class="row2-edit">
+                        <label class="button">
+                            <i class="pi pi-plus text-successs"
+                               style="font-size: 1rem"
+                               data-bs-toggle="modal" data-bs-target="#exampleModal"></i>
+                        </label>
+                    </span>
+
+                    <span class="row">
+                        <label>reference</label>
+                        <input type="text" pInputText [(ngModel)]="reference" />
+                    </span>
+                    <span class="row">
+                        <label>cmr</label>
+                        <input type="text" pInputText [(ngModel)]="cmr" />
+                    </span>
+                </div>
+
+                <div class="input-row">
+                    <span class="row">
+                        <label>Embarquement</label>
+                        <div class="check-box">
+                            <input type="checkbox"
+                                   [(ngModel)]="bool1" />
+                        </div>
+                    </span>
+                    <span class="row">
+                        <label>Taxation</label>
+                        <div class="check-box">
+                            <input type="checkbox" 
+                                   [(ngModel)]="bool2"/>
+                        </div>
+                    </span>
+                </div>
+
+                <div class="input-row">
+                    <span class="row row-edit">
+                        <label>Commentaire</label><br>
+                        <textarea 
+                            [(ngModel)]="cmtr"
+                            rows="5" 
+                            cols="80" 
+                            pInputTextarea [autoResize]="true"></textarea>
+                    </span>
+                </div>
+            </div>
+        </p-accordionTab>
+        <p-accordionTab header="Expéditeur / Destinataire">
+            <div class="title">
+                <h3></h3>
+            </div>
+            <div class="title actions">
+                <div class="add" (click)="addExp()">
+                    <img  src="https://cloud.digiparc.com/assets/icon40/add.svg" alt="add">
+                </div>
+            </div>
+            <table class="table-input">
+                <thead>
+                    <tr>
+                        <th>Expediteur</th>
+                        <th>Destinataire</th>
+                        <th>Date Chargement</th>
+                        <th>Retard Chargement</th>
+                        <th>Retard Déchargement</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let exp of expTable">
+                        <td>
+                            <label *ngIf="exp.menu">
+                                <p-dropdown 
+                                    class="calendar"
+                                    [options]="clients" 
+                                    [(ngModel)]="expediteurU" 
+                                    optionLabel="name">
+                                </p-dropdown>
+                            </label>
+                            <label *ngIf="!exp.menu">
+                                {{ exp.exp }}
+                            </label>
+                        </td>
+                        <td>
+                            <label *ngIf="exp.menu">    
+                                <p-dropdown 
+                                    class="calendar"
+                                    [options]="clients" 
+                                    [(ngModel)]="destinateurU" 
+                                    optionLabel="name">
+                                </p-dropdown>
+                            </label>
+                            <label *ngIf="!exp.menu">
+                                {{ exp.dest }}
+                            </label>
+                        </td>
+                        <td>
+                            <label *ngIf="exp.menu">
+                                <p-calendar [(ngModel)]="dateChargementPU" [readonlyInput]="true"></p-calendar>
+                            </label>
+                            <label *ngIf="!exp.menu">
+                                {{ exp.dc }}
+                            </label>
+                        </td>
+                        <td>
+                            <label *ngIf="exp.menu">
+                                <input type="text" pInputText [(ngModel)]="retardChargementU" />
+                            </label>
+                            <label *ngIf="!exp.menu">
+                                {{ exp.rc }}
+                            </label>
+                        </td>
+                        <td>
+                            <label *ngIf="exp.menu">
+                                <input type="text" pInputText [(ngModel)]="retardDeChargementU" />
+                            </label>
+                            <label *ngIf="!exp.menu">
+                                {{ exp.rd }}
+                            </label>
+                        </td>
+                        <td>
+                            <div class="actions-exp">
+                                <i 
+                                    (click)="deleteExp(exp.id)"
+                                    class="pi pi-trash text-danger"
+                                    style="font-size: 1.1rem"></i>
+                            </div>
+                            <div class="actions-exp">
+                                <i  
+                                    *ngIf="!exp.menu"
+                                    (click)="updateExp(exp)"
+                                    class="pi pi-file-edit text-success" style="font-size: 1.1rem"></i>
+                                
+                                <i  
+                                    *ngIf="exp.menu"
+                                    (click)="onUpdateExp(exp)"
+                                    class="pi pi-check text-success" style="font-size: 1.1rem"></i>    
+                            </div>
+                        </td>
+                    </tr>
+                    <tr *ngIf="input">
+                        <td>
+                            <span class="input-grid">  
+                                <p-dropdown 
+                                    class="calendar"
+                                    [options]="clients" 
+                                    [(ngModel)]="expediteur" 
+                                    optionLabel="name">
+                                </p-dropdown>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="input-grid">  
+                                <p-dropdown 
+                                    class="calendar"
+                                    [options]="clients" 
+                                    [(ngModel)]="destinateur" 
+                                    optionLabel="name">
+                                </p-dropdown>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="input-grid"> 
+                                <p-calendar [(ngModel)]="dateChargementP" [readonlyInput]="true"></p-calendar>
+                            </span>  
+                        </td>
+                        <td>
+                            <span class="input-grid"> 
+                                <input type="text" pInputText [(ngModel)]="retardChargement" />
+                            </span>
+                        </td>
+                        <td>
+                            <span class="input-grid"> 
+                                <input type="text" pInputText [(ngModel)]="retardDeChargement" />
+                            </span>
+                        </td>
+                        <td>
+                            <div class="actions-exp">
+                                <i 
+                                    (click)="deleteExp(4)"
+                                    class="pi pi-trash text-danger"
+                                    style="font-size: 1.1rem"></i>
+                            </div>
+                            <div class="actions-exp">
+                                <i  
+                                    (click)="addTable()"
+                                    [class]="input ? 'pi pi-check text-success' : 'pi pi-file-edit text-success'" style="font-size: 1.1rem"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </p-accordionTab>
+    </p-accordion>
+
+
+    <div class="addVoyage">
+        <input 
+            (click)="updateVoyage()"
+            type="button" value="Update Voyage"
+            class="btn btn-primary float-end ms-4" />
+    </div>
+
+    <!----------------Modal Add Client Start------------------->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Client</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input 
+                    type="text"
+                    class="client-input"
+                    placeholder="Name" 
+                    pInputText [(ngModel)]="clnt" />
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button 
+                (click)="addClient()"
+                type="button"
+                class="btn btn-success" 
+                data-bs-dismiss="modal">Add</button>
+            </div>
+        </div>
+        </div>
+    </div>
+    <!----------------Modal Add Client End------------------->
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--Success And Error Message-->
+<p-toast></p-toast>
+
+
+<!----------------Modal Delete Voyage Start------------------->
+<div class="modal fade" id="deleteModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add Client</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            Are You Sure You Want To Delete This??
+        </div>
+        <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button 
+            (click)="deleteVoyage()"
+            type="button"
+            class="btn btn-danger" 
+            data-bs-dismiss="modal">Yes, I am</button>
+        </div>
+    </div>
+    </div>
+</div>
+<!----------------Modal Delete Voyage End------------------->
+
+
+<!-- Modal For Show Expediteur Start -->
+<div class="expDetail">
+    <div class="modal fade" id="showExp" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Expediteur</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p-table 
+                [value]="expDt"    
+                [paginator]="true"     
+                [rows]="4"
+                [tableStyle]="{ 'min-width': '50rem' }">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Expediteur</th>
+                            <th>Destinateur</th>
+                            <th>Date Chargement	</th>
+                            <th>Retard Chargement</th>
+                            <th>Retard Déchargement	</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-expDt>
+                        <tr>
+                            <td>{{ expDt.exp }}</td>
+                            <td>{{ expDt.dest }}</td>
+                            <td>{{ expDt.dc }}</td>
+                            <td>{{ expDt.rc }}</td>
+                            <td>{{ expDt.rd }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+    
+          </div>
+        </div>
+      </div>
+</div>
+
+<!-- Modal For Show Expediteur End -->

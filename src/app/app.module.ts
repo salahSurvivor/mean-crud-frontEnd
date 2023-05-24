@@ -41,11 +41,17 @@ import { Page404Component } from './page404/page404.component';
 import { LoginGuard } from './guards/login.guard';
 import { IsAdminGuard } from './guards/is-admin.guard';
 import { LocationComponent } from './location/location.component';
+import { HomeComponent } from './digiparc/home/home.component';
+import { VoyageAddComponent } from './digiparc/voyage-add/voyage-add.component';
+import { HeaderComponent } from './digiparc/header/header.component';
+import { AccordionModule } from 'primeng/accordion';
+import { DropdownModule } from 'primeng/dropdown';
+import { TieredMenuModule } from 'primeng/tieredmenu';
 
 const appRoutes: Routes = [
   {
     path: '',
-    component: BrothersComponent,
+    component: HomeComponent,
     canActivate: [LoginGuard]
   },
   {
@@ -74,10 +80,23 @@ const appRoutes: Routes = [
     path: 'location',
     component: LocationComponent
   },
+
+
+  /*********Digiparc*********/
+  {
+    path: 'home',
+    component: BrothersComponent,
+    canActivate: [LoginGuard]
+  },
+  {
+    path: 'voyage',
+    component: VoyageAddComponent,
+    canActivate: [LoginGuard]
+  },
   {
     path: '**',
     component: Page404Component
-  }
+  },
 ] 
 
 @NgModule({
@@ -96,6 +115,9 @@ const appRoutes: Routes = [
     ReadUserComponent,
     Page404Component,
     LocationComponent,
+    HomeComponent,
+    VoyageAddComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,
@@ -117,6 +139,9 @@ const appRoutes: Routes = [
     InputTextModule,
     InputTextareaModule,
     ToggleButtonModule,
+    AccordionModule,
+    DropdownModule,
+    TieredMenuModule,
     RouterModule.forRoot(appRoutes, { enableTracing: false })
   ],
   providers: [

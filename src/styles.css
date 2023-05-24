@@ -59,7 +59,21 @@ h3{
     position: absolute;
     width: 100%;
     height: 100%;
-    background: linear-gradient(180deg, rgba(70, 86, 169, 1) 31%, rgba(0, 125, 216, 1) 100%);
+    background: #0069ff;
+}
+
+.register-form label{
+    font-weight: 500;
+    font-size: 17px;
+    color: #fff;
+    margin: 10px 0;
+}
+
+.register-form img{
+    position: absolute;
+    margin: 50px 100px;
+    width: 200px;
+    color: #fff;
 }
 
 .register-form form{
@@ -67,7 +81,6 @@ h3{
     border-radius: 8px;
     width: 400px;
     padding: 30px 20px 50px 20px;
-    background: #fff;
 }
 
 .register-form .input-text{
@@ -79,9 +92,15 @@ h3{
 }
 
 .register-form input.btn.btn-primary {
-    margin: 0 8px;
-    width: 330px;
+    align-items: center;
+    position: relative;
+    left: 110px;
+    width: 130px;
+    padding: 14px;
     border-radius: 5px;
+    background: #0755c2;
+    font-weight: bold;
+    border-radius: 16px;
 }
 
 .p-button{
@@ -91,3 +110,322 @@ h3{
 .edit-register-btn{
     margin: 16px;
 }  
+
+
+/*************DigiParc Home Start****************/
+.navbar{
+    background: #eee;
+}
+
+.home{
+    text-align: center;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.home h2{
+    color: #fff;
+    background: rgb(56, 56, 243);
+    padding: 35px;
+    border-radius: 12px;
+}
+
+.navbar img{
+    width: 200px;
+    height: 60px;
+}
+
+.onList .p-datatable .p-datatable-thead > tr > th {
+    font-weight: 450;
+    color: #fff;
+    background: #005d94;
+}
+
+.onAdd .p-datatable .p-datatable-thead > tr > th {
+    font-weight: 450;
+}
+
+.actions{
+    float: right;
+    position: relative;
+    top: 25px;
+}
+
+.actions img{
+    width: 40px;
+    height: 40px;
+}
+
+.actions div{
+    cursor: pointer;
+    display: inline;
+    margin:  0px 3px;
+}
+
+.title{
+    display: inline-block;
+    margin: 0 5px;
+}
+
+
+.p-accordion .p-accordion-header:not(.p-disabled).p-highlight .p-accordion-header-link {
+    color: #2961ff;
+}
+
+.p-accordion .p-accordion-header:not(.p-disabled).p-highlight .p-accordion-header-link:hover {
+    color: #2961ff;
+}
+
+.input-row{
+    margin: 25px 0 15px 0;
+}
+
+.client-label{
+    display: none;
+}
+
+.add-trajet{
+    border: 1px solid lightgrey;
+    padding: 20px;
+}
+
+.input-row:first-child{
+    margin: 25px 0 0 0;
+}
+
+.input-row .row{
+    display: inline-block;
+    width: 210px;
+    margin: 0 10px;
+}
+
+.input-row .row-edit{
+    width: 63%;
+}
+
+.input-row .row label{
+    margin: 10px 0;
+}
+
+.p-dropdown .p-dropdown-label {
+    width: 115px;
+}
+
+.input-row .row .addCln{
+    align-items: right;
+    display: inline;
+}
+
+.p-button.p-button-success.p-button-text, .p-buttonset.p-button-success > .p-button.p-button-text, .p-splitbutton.p-button-success > .p-button.p-button-text { 
+    border: 1px solid #eee;
+}
+
+.addCln{
+    display: none;
+}
+
+.table-exp{
+    width: 100%;
+    text-align: center;
+}
+
+.input-grid input,
+.input-grid .p-dropdown .p-dropdown-label{
+    width: 110px;
+}
+
+.title .add{
+    cursor: pointer;
+}
+
+.onAdd .actions img {
+    position: absolute;
+    top: -22px;
+    right: 27px;
+}
+
+.actions-exp i{
+    cursor: pointer;
+    margin: 2px 0;
+    padding: 8px;
+    border-radius: 50%;
+}
+
+.actions-exp i:hover{
+   background: #eee;
+}
+
+.row1-edit{
+    margin: 0 -10px;
+    width: 50px;
+}
+
+.row2-edit{
+    font-size: 29px;
+    font-weight: 5;
+}
+
+.row2-edit label i{
+    cursor: pointer;
+    width: auto;
+    color: rgb(102, 156, 102);
+    padding: 15px 9px;
+    border: 1px solid #ccc; 
+    border-radius: 5px;
+    margin: 0 24px 0 0px;
+}
+
+.row2-edit label i:hover{
+    transition: all .5s ease;
+    background: rgb(212, 253, 212);
+}
+
+span.row.row1-edit {
+    width: 186px;
+    margin: 0 -3px;
+}
+
+input.p-inputtext.p-component.p-element.client-input.ng-untouched.ng-pristine.ng-valid {
+    width: 100%;
+}
+
+.onList .actions {
+    float: right;
+    position: absolute;
+    top: 130px;
+    right: 120px;
+}
+
+.menu-actions{
+    transition: all .5s ease;
+}
+
+.menu-actions div label{
+    cursor: pointer;
+}
+
+.actions-container i{
+    cursor: pointer;
+    margin: 0 8px;
+}
+
+.actions-container .menu-actions{
+    position: absolute;
+    background: #eee;
+    width: 200px;
+    border-radius: 8px;
+    padding: 5px 0;
+    margin: 5px 15px;
+}
+
+.actions-container .menu-actions div{
+    cursor: pointer;
+    width: 200px;
+    line-height: 50px;
+    border-bottom: 0.5px solid #ccc;
+}
+
+.actions-container .menu-actions div:hover{
+    background: #ccc;
+}
+
+.btn-addVoyage{
+    margin: 10px 0;
+}
+
+.btn-addVoyage button{
+    padding: 18px;
+    border-radius: 12px;
+}
+
+.addVoyage input.btn.btn-primary.float-end.ms-4{
+    cursor: pointer;
+    border-radius: 6px;
+    padding: 11px;
+    background: #1976D2;
+}
+
+.addVoyage input.btn.btn-primary.float-end.ms-4:hover {
+    background: #1976AE;
+}
+
+.table-input{
+    width: 100%;
+}
+
+.table-input tr{
+    text-align: center;
+}
+
+.table-input thead{
+    background: #1976AE;
+    color: #fff;
+    height: 70px;
+    margin: 15px 0;
+}
+
+.table-input tbody{
+    position: relative;
+    top: 16px;
+}
+
+.table tr th{
+    background: #eee;
+}
+
+.expDetail .modal-content {
+    width: 200%;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.expDetail .p-datatable .p-datatable-thead > tr > th {
+    font-weight: 450;
+    color: #fff;
+    background: #005d94;
+}
+/*************DigiParc Home End****************/
+
+
+/********CheckBox**********/
+.check-box {
+	transform: scale(2);
+    margin: 0px 88px;
+}
+
+input[type="checkbox"] {
+    position: relative;
+    appearance: none;
+    width: 20px;
+    height: 10px;
+    background: #ccc;
+    border-radius: 50px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+input:checked[type="checkbox"] {
+    background: #7da6ff;
+}
+
+input[type="checkbox"]::after {
+    position: absolute;
+    content: "";
+    width: 10px;
+    height: 10px;
+    top: 0;
+    left: 0px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
+    transition: 0.4s;
+}
+
+input:checked[type="checkbox"]::after {
+    left: 60%;
+}

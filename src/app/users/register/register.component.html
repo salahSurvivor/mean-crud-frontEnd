@@ -1,4 +1,7 @@
 <div class="register-form">
+    <img src="https://cloud.digiparc.com/assets/logo-digiparc.svg" alt="img" />
+
+
     <form (ngSubmit)="onSubmit()">
         <div class="input-text">
             <input 
@@ -25,6 +28,10 @@
         </div>
 
         <input type="submit" value="Register" class="btn btn-primary" />
+
+        <div></div>
+        <a routerLink="/login"
+           class="float-end edit-register-btn text-white">Login</a>
     </form>
 </div>
 

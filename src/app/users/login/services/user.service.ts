@@ -28,7 +28,7 @@ export class UserService {
 
   logout() {
     localStorage.removeItem('token');
-    localStorage.removeItem('admin');
+    localStorage.removeItem('numero');
   }
 
   isAuthenticated(): boolean {
