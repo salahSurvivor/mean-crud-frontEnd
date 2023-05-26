@@ -5,7 +5,10 @@ import { VoyageService } from '../services/voyage.service';
 import { Exp } from '../models/exp';
 import { Client } from '../models/client';
 import { Mix } from '../models/mix';
-import  ObjectID  from 'bson-objectid';
+/****************Exel File***************************/
+import { Workbook } from 'exceljs';
+import * as fs from 'file-saver';
+import * as ExcelJS from 'exceljs';
 
 @Component({
   selector: 'app-voyage-add',
@@ -35,33 +38,33 @@ export class VoyageAddComponent {
   expTable: Exp[] = [];
   expDt: Exp[];
   clients: Client[];
+  nmrs: any[];
   deleteId: string;
   /***********List Voyage Vars End*********/
 
   /********voyage addd vars start********/
   date = new Date();
-  dateFormat = formatDate(this.date, 'MM/dd/yyyy', 'en-Us')
+  dateFormat = formatDate(this.date, 'MM/dd/yyyy', 'en-Us');
 
   numero: string = '';
   dateC: string = this.dateFormat;
   dateD: string = this.dateFormat;
-  client: Client = {name: ''};
+  client: Client;
   reference: string = '';
   cmr: string = '';
   bool1: boolean = false;
   bool2: boolean = false;
   cmtr: string = '';
 
-  expediteur: Client = {name: ''};
-  destinateur: Client = {name: ''};
+  expediteur: Client;
+  destinateur: Client;
   dateChargementP: any = this.dateFormat;
   retardChargement: string
   retardDeChargement: string;
-  //cmr2: string = '';
 
   /*****When Update*******/
-  expediteurU: Client = {name: ''};
-  destinateurU: Client = {name: ''};
+  expediteurU: Client;
+  destinateurU: Client;
   dateChargementPU: any = this.dateFormat;
   retardChargementU: string
   retardDeChargementU: string;
@@ -70,15 +73,18 @@ export class VoyageAddComponent {
   counterSplit: any = 0;
   /********voyage addd vars end********/
 
+  dateDebut: String;
+  dateFin = '';
+
   constructor(private voyageService: VoyageService,
               private messageService: MessageService){}
 
   ngOnInit(): void{
     this.voyageService.numeroSplit().subscribe((vl) => localStorage.setItem('numero', vl));
-
     this.voyageService.readMix().subscribe((vl) => this.mix = vl);
     this.voyageService.readExp().subscribe((vl) => this.exp = vl);
     this.voyageService.readClient().subscribe((vl) => this.clients = vl);
+    this.nullVars();
   }
 
   toggleActions(id): void{
@@ -212,27 +218,10 @@ export class VoyageAddComponent {
     }
 
     this.voyageService.createMix(data).subscribe(() => this.ngOnInit());
-    
     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Added Succussfuly!!' });
 
-    this.dateC = this.dateFormat;
-    this.dateD = this.dateFormat;
-    this.reference = null;
-    this.cmr = null;
-    this.bool1 = false;
-    this.bool2 = false;
-    this.cmtr = null;
-
-    this.dateChargementP = this.dateFormat;
-    this.retardChargement = null;
-    this.retardDeChargement = null;
-    this.isAddExp = false;
-
-    this.expTable = [];
-
-    this.onList  = true;
-    this.onAdd = false; 
-    this.onUpdate = false;
+    this.nullVars();
+    this.cancelBtn();
   }
 
   getId(id){
@@ -258,8 +247,14 @@ export class VoyageAddComponent {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Added Succussfuly!!' });
       });
   } 
-
   /**********Update Part*************/
+
+  cancelBtn(): void{
+    this.onAdd = false;
+    this.onUpdate = false;
+    this.onList = true;
+    this.ngOnInit();
+  }
 
   updateVoyage(): void{
     const data: Mix = {
@@ -278,12 +273,22 @@ export class VoyageAddComponent {
     }
 
     this.voyageService.updateMix(data).subscribe(() => this.ngOnInit());
-
     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Updated Succussfuly!!' });
 
+    this.nullVars();
+    this.cancelBtn();
+  }
+
+  /**************Make All the Variables null***************/
+  nullVars(): void{
+    this.dateD = '';
+    this.dateDebut = formatDate(this.date, 'MM', 'en-Us') + '/01/' + formatDate(this.date, 'yyyy', 'en-Us');
+    this.dateFin = '99/99/9999';
     this.dateC = this.dateFormat;
     this.dateD = this.dateFormat;
-    this.reference = null;
+    this.reference = '';
+    this.numero = '';
+    this.client = null;
     this.cmr = null;
     this.bool1 = false;
     this.bool2 = false;
@@ -295,12 +300,131 @@ export class VoyageAddComponent {
     this.isAddExp = false;
 
     this.expTable = [];
+  }
+  
+  /************Filter Part************/
 
-    this.onList  = true;
-    this.onAdd = false; 
-    this.onUpdate = false;
+  onFilter(): void{ 
+    let num: any = null;
+    let testNull = false;
 
-    this.ngOnInit();
-    this.voyageService.readMix().subscribe((vl) => this.mix = vl);
+    if(this.numero !== ''){
+      num = [];
+      num.push(this.numero);
+    }
+
+    if(this.client === null)
+      testNull = true;
+
+    if(this.dateFin !== '99/99/9999')
+      this.dateFin = formatDate(this.dateFin, 'MM/dd/yyyy', 'en-Us');
+  
+      
+    this.voyageService.readMix()
+      .subscribe((value) => this.mix = value.filter((vl) => (
+        vl.numero.includes(num ? num[0].numero : '') &&
+        vl.reference.includes(this.reference) &&
+        vl.client.includes(testNull ? '' : this.client.name) &&
+         vl.dateC >= formatDate(String(this.dateDebut), 'MM/dd/yyyy', 'en-Us') && 
+         vl.dateC <= this.dateFin
+    )));
+  }
+
+  search(event) {
+    this.voyageService.readMix()
+      .subscribe((vl) => this.nmrs = vl.filter((value) => value.numero.includes(event.query)));
+  }
+
+  /*********Exel Part***********/
+  downloadExel(): void{
+    let time = formatDate(this.date, 'shortTime', 'en-Us');
+    let date =  formatDate(this.date, 'fullDate', 'en-Us');
+    let fullDate = 'Date:  ' + date + ' ' + time;
+
+    let workbook = new Workbook();
+
+    // Set cell styles
+    const headerStyle: Partial<ExcelJS.Style> = {
+      font: { bold: true },
+      alignment: { horizontal: 'center' },
+      border: {
+        top: { style: 'thin' as ExcelJS.BorderStyle },
+        left: { style: 'thin' as ExcelJS.BorderStyle },
+        bottom: { style: 'thin' as ExcelJS.BorderStyle },
+        right: { style: 'thin' as ExcelJS.BorderStyle }
+      },
+      fill: {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: '4ec3cf' } // Specify the hex color code here
+      }
+    };
+        
+    // Set column widths
+    const cellStyle: Partial<ExcelJS.Style> = {
+      border: {
+         top: { style: 'thin' as ExcelJS.BorderStyle },
+         left: { style: 'thin' as ExcelJS.BorderStyle },
+         bottom: { style: 'thin' as ExcelJS.BorderStyle },
+         right: { style: 'thin' as ExcelJS.BorderStyle }
+      }
+    };
+
+    let worksheet = workbook.addWorksheet("voyage");
+
+    let titleRow = worksheet.addRow(['Voyages', '', '', '', fullDate]);
+    titleRow.font = { family: 4, size: 19, bold: true };
+
+    let header = ["Numero", "Date Création", "Date Départ", "Client", "Reference", "Cmr", "Embarquement", "Taxation", "Commentaire"];
+
+    const head = worksheet.addRow(header);
+    head.eachCell((cell) => {
+      cell.font = headerStyle.font;
+      cell.alignment = headerStyle.alignment;
+      cell.border = headerStyle.border;
+      cell.fill = headerStyle.fill
+    })
+
+    // Apply column widths
+    header.forEach((width, columnIndex) => {
+      const column = worksheet.getColumn(columnIndex + 1);
+      column.width = 25;
+    });
+
+    for (let x1 of this.mix)
+    {
+      let data = {
+        numero: x1.numero,
+        dateC: x1.dateC,
+        dateD: x1.dateD,
+        client: x1.client,
+        reference: x1.reference,
+        cmr: x1.cmr,
+        bool1: x1.bool1,
+        bool2: x1.bool2,
+        cmtr: x1.cmtr
+      }
+
+      let x2=Object.keys(data);
+      let temp=[]
+      for(let y of x2)
+      {
+        temp.push(x1[y]);
+      }
+      const vy = worksheet.addRow(temp)
+      vy.eachCell((cell) => {
+        cell.font = cellStyle.font;
+        cell.alignment = cellStyle.alignment;
+        cell.border = cellStyle.border;
+      })
+    }
+
+    let fname="Voyage";
+
+    //add data and file name and download
+    workbook.xlsx.writeBuffer().then((data) => {
+      let blob = new Blob([data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      fs.saveAs(blob, fname+'-'+new Date().valueOf()+'.xlsx');
+    });
   }
 }

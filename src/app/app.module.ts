@@ -9,6 +9,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
 import { InputTextareaModule } from 'primeng/inputtextarea'; 
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 
 import { AppComponent } from './app.component';
@@ -142,6 +143,7 @@ const appRoutes: Routes = [
     AccordionModule,
     DropdownModule,
     TieredMenuModule,
+    AutoCompleteModule,
     RouterModule.forRoot(appRoutes, { enableTracing: false })
   ],
   providers: [

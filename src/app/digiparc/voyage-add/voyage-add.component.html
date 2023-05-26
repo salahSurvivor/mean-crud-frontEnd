@@ -14,12 +14,68 @@
                 src="https://cloud.digiparc.com/assets/icon40/add.svg"
                 alt="add" />
         </div>
+        <div class="add">
+            <img 
+                (click)="downloadExel()"
+                src="https://cloud.digiparc.com/assets/icon40/excel.svg"
+                alt="add" />
+        </div>
         <div class="reload">
            <img 
                 (click)="ngOnInit()"
                 src="https://cloud.digiparc.com/assets/icon40/refresh.svg" alt="reload" />
         </div>
     </div>
+    
+    <div class="onFilter">
+        <p-accordion [activeIndex]="1">
+            <p-accordionTab header="Filter">
+                <div class="filter-container">
+                    <div class="input-filter">
+                        <div class="label">Date Début</div>
+                        <p-calendar 
+                            [(ngModel)]="dateDebut" 
+                            [showIcon]="true" (ngModelChange)="onFilter()"></p-calendar>
+                    </div>
+                    <div class="input-filter">
+                        <div class="label">Date Fin</div>
+                        <p-calendar
+                            [(ngModel)]="dateFin" 
+                            dateFormat="mm/dd/yy"
+                            [showIcon]="true" (ngModelChange)="onFilter()"></p-calendar>
+                    </div>
+                    <div class="input-filter">
+                        <div class="label">Client</div>
+                        <p-dropdown 
+                            [options]="clients" 
+                            [showClear]="true"
+                            [(ngModel)]="client" 
+                            placeholder="Choisir" 
+                            [filter]="true" filterBy="name"
+                            optionLabel="name" (ngModelChange)="onFilter()"></p-dropdown>
+                    </div>
+                </div>
+
+                <div class="filter-container">
+                    <div class="input-filter">
+                        <div class="label">Numéro</div>
+                        <p-autoComplete 
+                            [(ngModel)]="numero" 
+                            [suggestions]="nmrs" 
+                            (completeMethod)="search($event)" 
+                            field="numero"
+                            (onSelect)="onFilter()"></p-autoComplete>
+                    </div>
+                    <div class="input-filter">
+                        <div class="label">Reference</div>
+                        <input type="text" pInputText [(ngModel)]="reference" (ngModelChange)="onFilter()" />
+                    </div>  
+                </div>
+
+            </p-accordionTab>
+         </p-accordion>       
+    </div>
+
     <p-table 
         [value]="mix"    
         [paginator]="true"     
@@ -280,7 +336,7 @@
                         <td>
                             <div class="actions-exp">
                                 <i 
-                                    (click)="deleteExp(4)"
+                                    (click)="addExp()"
                                     class="pi pi-trash text-danger"
                                     style="font-size: 1.1rem"></i>
                             </div>
@@ -303,6 +359,11 @@
             (click)="addVoyage()"
             type="button" value="Enregistrer Et Ajouter"
             class="btn btn-primary float-end ms-4" />
+
+        <input 
+            (click)="cancelBtn()"
+            type="button" value="Cancel"
+            class="btn btn-secondary float-end ms-4" />    
     </div>
 
     <!----------------Modal Add Client Start------------------->
@@ -545,7 +606,7 @@
                         <td>
                             <div class="actions-exp">
                                 <i 
-                                    (click)="deleteExp(4)"
+                                    (click)="addExp()"
                                     class="pi pi-trash text-danger"
                                     style="font-size: 1.1rem"></i>
                             </div>
@@ -568,6 +629,11 @@
             (click)="updateVoyage()"
             type="button" value="Update Voyage"
             class="btn btn-primary float-end ms-4" />
+        
+        <input 
+            (click)="cancelBtn()"
+            type="button" value="Cancel"
+            class="btn btn-secondary float-end ms-4" />     
     </div>
 
     <!----------------Modal Add Client Start------------------->

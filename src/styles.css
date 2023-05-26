@@ -91,7 +91,8 @@ h3{
     width: 350px;
 }
 
-.register-form input.btn.btn-primary {
+.register-form input.btn.btn-primary{
+
     align-items: center;
     position: relative;
     left: 110px;
@@ -101,6 +102,11 @@ h3{
     background: #0755c2;
     font-weight: bold;
     border-radius: 16px;
+}
+
+.input.btn.btn-secondary{
+    width: 250px;
+    height: 150px
 }
 
 .p-button{
@@ -382,10 +388,31 @@ input.p-inputtext.p-component.p-element.client-input.ng-untouched.ng-pristine.ng
     transform: translateX(-50%);
 }
 
+.addVoyage{
+    margin: 16px 0;
+}
+
 .expDetail .p-datatable .p-datatable-thead > tr > th {
     font-weight: 450;
     color: #fff;
     background: #005d94;
+}
+
+.addVoyage input.btn.btn-secondary.float-end.ms-4 {
+    width: 100px;
+    padding: 12px;
+    border-radius: 9px;
+    margin: 0 -13px;
+}
+
+.onFilter .input-filter{
+    display: inline-block;
+    margin: 0px 10px;
+    width: 210px;
+}
+
+.onFilter .input-filter div{
+    margin: 8px 0;
 }
 /*************DigiParc Home End****************/
 
