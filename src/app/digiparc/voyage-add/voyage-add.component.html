@@ -25,6 +25,11 @@
                 (click)="ngOnInit()"
                 src="https://cloud.digiparc.com/assets/icon40/refresh.svg" alt="reload" />
         </div>
+        <div class="import">
+            <img 
+                 data-bs-toggle="modal" data-bs-target="#importModal"
+                 src="https://cloud.digiparc.com/assets/icon40/import.svg" alt="reload" />
+        </div>
     </div>
     
     <div class="onFilter" (click)="onFilter()">
@@ -174,6 +179,9 @@
                         <label>cmr</label>
                         <input type="text" pInputText [(ngModel)]="cmr" />
                     </span>
+                    <div class="form-text text-danger textEdit" *ngIf="isClient">
+                        <p>Client Is Required</p>
+                    </div>
                 </div>
 
                 <div class="input-row">
@@ -423,6 +431,7 @@
                         <label>Clients</label>
                         <p-dropdown 
                             class="calendar"
+                            placeholder="Choisir"
                             [options]="clients" 
                             [(ngModel)]="client" 
                             optionLabel="name">
@@ -754,5 +763,29 @@
         </div>
       </div>
 </div>
-
 <!-- Modal For Show Expediteur End -->
+
+<!---------------Import Modal Exel Start--------------->
+<div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Import Exel File</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <input 
+                class="form-control"
+                type="file" 
+                [(ngModel)]="exelTxt"
+                (change)="readExcel($event)"
+            />
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="onAddExel()">Import</button>
+        </div>
+      </div>
+    </div>
+</div>
+<!---------------Import Modal Exel End----------------->

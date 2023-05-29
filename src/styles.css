@@ -414,6 +414,15 @@ input.p-inputtext.p-component.p-element.client-input.ng-untouched.ng-pristine.ng
 .onFilter .input-filter div{
     margin: 8px 0;
 }
+
+.text-edit{
+    position: relative;
+    left: 25px;
+}
+
+.textEdit p{
+    margin: 0 16px;
+}
 /*************DigiParc Home End****************/
 
 
@@ -456,3 +465,4 @@ input[type="checkbox"]::after {
 input:checked[type="checkbox"]::after {
     left: 60%;
 }
+

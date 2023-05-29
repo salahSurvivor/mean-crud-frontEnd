@@ -5,13 +5,14 @@ import { VoyageService } from '../services/voyage.service';
 import { Exp } from '../models/exp';
 import { Client } from '../models/client';
 import { Mix } from '../models/mix';
-/****************Exel File***************************/
+/****************Exel Export File***************************/
 import { Workbook } from 'exceljs';
 import * as fs from 'file-saver';
 import * as ExcelJS from 'exceljs';
-
 /*******************Token*************************/
 import { JwtHelperService } from '@auth0/angular-jwt';
+/*************Import Exel*************/
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-voyage-add',
@@ -32,12 +33,14 @@ export class VoyageAddComponent {
   isAddExp: boolean = false;
   expId: any; 
   username: string;
+  isClient: boolean = false;
   /******Organize Component end********/
 
   /***********List Voyage Vars Start********/
   //voyage: trajet[];
   exp: Exp[];
   mix: Mix[];
+  vygs: any;
   voyage: Mix;
   expTable: Exp[] = [];
   expDt: Exp[];
@@ -59,6 +62,7 @@ export class VoyageAddComponent {
   bool1: boolean = false;
   bool2: boolean = false;
   cmtr: string = '';
+  exelTxt: string;
 
   expediteur: Client;
   destinateur: Client;
@@ -212,12 +216,17 @@ export class VoyageAddComponent {
 
   /*********Voyage Part******/
   addVoyage(): void{
+    if(this.client === null){
+      this.isClient = true;
+      return;
+    }
+
     const year = formatDate(this.date, 'yyyy', 'en-Us');
     const number = localStorage.getItem('numero');
-    this.counterSplit += Number(number) + 1 + '/' + year;
+    this.counterSplit = Number(number) + 1 + '/' + year;
     
    const data: Mix = {
-      numero: this.counterSplit,
+      numero: "0" + this.counterSplit,
       dateC: formatDate(this.dateC, 'MM/dd/yyyy', 'en-Us'),
       dateD: formatDate(this.dateD, 'MM/dd/yyyy', 'en-Us'),
       client: this.client.name,
@@ -231,8 +240,13 @@ export class VoyageAddComponent {
       userName: this.username
     }
 
-    this.voyageService.createMix(data).subscribe(() => this.ngOnInit());
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Added Succussfuly!!' });
+    this.voyageService.createMix(data).subscribe(
+      () => {
+        this.ngOnInit();
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Added Succussfuly!!' });
+      }
+    );
+    
 
     this.nullVars();
     this.cancelBtn();
@@ -258,7 +272,8 @@ export class VoyageAddComponent {
       userName: this.username
     }
     this.voyageService.createClient(data).subscribe(() => {
-      this.ngOnInit();
+      this.clients.push(data);
+      this.clnt = null;
       this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Added Succussfuly!!' });
     }); 
   } 
@@ -299,6 +314,7 @@ export class VoyageAddComponent {
   nullVars(): void{
     this.clnt = '';
     this.dateD = '';
+    this.exelTxt = null;
     this.dateDebut = formatDate(this.date, 'MM', 'en-Us') + '/01/' + formatDate(this.date, 'yyyy', 'en-Us');
     this.dateFin = '99/99/9999';
     this.dateC = this.dateFormat;
@@ -309,6 +325,7 @@ export class VoyageAddComponent {
     this.cmr = null;
     this.bool1 = false;
     this.bool2 = false;
+    this.isClient = false;
     this.cmtr = null;
 
     this.dateChargementP = this.dateFormat;
@@ -335,7 +352,6 @@ export class VoyageAddComponent {
 
     if(this.dateFin !== '99/99/9999')
       this.dateFin = formatDate(this.dateFin, 'MM/dd/yyyy', 'en-Us');
-  
       
     this.voyageService.readMix({userName: this.username})
       .subscribe((value) => this.mix = value.filter((vl) => (
@@ -388,7 +404,7 @@ export class VoyageAddComponent {
     };
 
     let worksheet = workbook.addWorksheet("voyage");
-    let titleRow = worksheet.addRow(['Voyages', '', '', '', fullDate]);
+    let titleRow = worksheet.addRow(['Voyages']);
     titleRow.font = { family: 4, size: 19, bold: true };
     let header = ["Numero", "Date Création", "Date Départ", "Client", "Reference", "Cmr", "Embarquement", "Taxation", "Commentaire"];
     
@@ -444,4 +460,69 @@ export class VoyageAddComponent {
       fs.saveAs(blob, fname+'-'+new Date().valueOf()+'.xlsx');
     });
   }
-}
+
+  /**************Read Exel File*************/
+  readExcel(event: any) {
+    /* wire up file reader */
+    const target: DataTransfer = <DataTransfer>(event.target);
+    if (target.files.length !== 1) {
+      throw new Error('Cannot use multiple files');
+    }
+    const reader: FileReader = new FileReader();
+    reader.readAsBinaryString(target.files[0]);
+    reader.onload = (e: any) => {
+      /* create workbook */
+      const binarystr: string = e.target.result;
+      const wb: XLSX.WorkBook = XLSX.read(binarystr, { type: 'binary' });
+
+      /* selected the first sheet */
+      const wsname: string = wb.SheetNames[0];
+      const ws: XLSX.WorkSheet = wb.Sheets[wsname];
+
+      /* save data */
+      this.vygs = XLSX.utils.sheet_to_json(ws); // to get 2d array pass 2nd parameter as object {header: 1}
+    };
+  }
+
+  /***************Add Exel File To Db***************/
+  onAddExel(): void{
+    let i = 0;
+    this.vygs.forEach(() => {
+      i++;
+    })
+
+    let voyages = [];
+    for(let j=1; j<i; j++){
+      voyages.push(this.vygs[j]);
+    }
+    const year = formatDate(this.date, 'yyyy', 'en-Us');
+    const number = localStorage.getItem('numero');
+    let cnt = Number(number) - 1;
+   // console.log(voyages);
+    voyages.forEach((vl) => {
+      cnt = cnt + 1;
+      this.counterSplit = cnt + 1 + '/' + year;
+
+      const data = {
+        numero: "0" + this.counterSplit,
+        dateC: formatDate(vl.__EMPTY, 'MM/dd/yyyy', 'en-Us'),
+        dateD: formatDate(vl.__EMPTY_1, 'MM/dd/yyyy', 'en-Us'),
+        client: vl.__EMPTY_2,
+        reference: vl.__EMPTY_3,
+        cmr: vl.__EMPTY_4,
+        bool1: vl.__EMPTY_5,
+        bool2: vl.__EMPTY_6,
+        cmtr: vl.__EMPTY_7,
+        expediteur : this.expTable,
+        menu: false,
+        userName: this.username 
+      }
+
+      this.voyageService.createMix(data).subscribe(() => this.ngOnInit());
+    });
+
+    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Imported With Succuss!!' });
+    this.nullVars();
+  }
+
+} 
