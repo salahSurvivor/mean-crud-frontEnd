@@ -9,12 +9,15 @@ import { Mix } from '../models/mix';
 @Injectable({
   providedIn: 'root'
 })
+
 export class VoyageService {
   private trajetUrl = 'http://localhost:3000/trajet/';
   private expUrl = 'http://localhost:3000/exp/';
   private clientUrl = 'http://localhost:3000/client/';
   private numeroUrl = 'http://localhost:3000/last/';
   private mixUrl = 'http://localhost:3000/mix/';
+  private clientUrlShow = 'http://localhost:3000/clientShow';
+  private mixAddUrl = 'http://localhost:3000/mixAdd/';
 
   constructor(private http: HttpClient){}
 
@@ -51,8 +54,8 @@ export class VoyageService {
   /*Expéditeur Part End*/
 
   /*Client Part Start*/
-  readClient(): Observable<Client[]>{
-    return this.http.get<Client[]>(this.clientUrl);
+  readClient(data): Observable<Client[]>{
+    return this.http.post<Client[]>(this.clientUrlShow, data);
   }
   
   createClient(data: Client): Observable<Client>{
@@ -61,12 +64,12 @@ export class VoyageService {
   /*Client Part End*/
 
   /*mix part start*/
-  readMix(): Observable<Mix[]>{
-    return this.http.get<Mix[]>(this.mixUrl);
+  readMix(data): Observable<Mix[]>{
+    return this.http.post<Mix[]>(this.mixUrl, data);
   }
 
   createMix(data: Mix): Observable<Mix>{
-    return this.http.post<Mix>(this.mixUrl, data);
+    return this.http.post<Mix>(this.mixAddUrl, data);
   }
 
   deleteMix(id): Observable<Mix>{
@@ -79,7 +82,7 @@ export class VoyageService {
   /*mix part end */
 
   /*Numero Split*/
-  numeroSplit(): Observable<any>{
-    return this.http.get<any>(this.numeroUrl);
+  numeroSplit(data): Observable<any>{
+    return this.http.post<any>(this.numeroUrl, data);
   }
 }

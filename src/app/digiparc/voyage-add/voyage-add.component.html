@@ -27,7 +27,7 @@
         </div>
     </div>
     
-    <div class="onFilter">
+    <div class="onFilter" (click)="onFilter()">
         <p-accordion [activeIndex]="1">
             <p-accordionTab header="Filter">
                 <div class="filter-container">
@@ -153,6 +153,7 @@
                         <p-dropdown 
                             class="calendar"
                             [options]="clients" 
+                            placeholder="Choisir"
                             [(ngModel)]="client" 
                             optionLabel="name">
                         </p-dropdown>

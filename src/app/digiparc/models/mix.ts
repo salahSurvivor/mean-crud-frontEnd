@@ -12,5 +12,6 @@ export interface Mix{
     bool2: boolean,
     cmtr: string,
     expediteur: Exp[],
-    menu: boolean
+    menu: boolean,
+    userName: string
 }

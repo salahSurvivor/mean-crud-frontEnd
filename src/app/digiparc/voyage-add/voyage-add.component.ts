@@ -10,6 +10,9 @@ import { Workbook } from 'exceljs';
 import * as fs from 'file-saver';
 import * as ExcelJS from 'exceljs';
 
+/*******************Token*************************/
+import { JwtHelperService } from '@auth0/angular-jwt';
+
 @Component({
   selector: 'app-voyage-add',
   templateUrl: './voyage-add.component.html',
@@ -28,6 +31,7 @@ export class VoyageAddComponent {
   update: boolean = false;
   isAddExp: boolean = false;
   expId: any; 
+  username: string;
   /******Organize Component end********/
 
   /***********List Voyage Vars Start********/
@@ -77,14 +81,23 @@ export class VoyageAddComponent {
   dateFin = '';
 
   constructor(private voyageService: VoyageService,
-              private messageService: MessageService){}
+              private messageService: MessageService,
+              private jwt: JwtHelperService){}
 
   ngOnInit(): void{
-    this.voyageService.numeroSplit().subscribe((vl) => localStorage.setItem('numero', vl));
-    this.voyageService.readMix().subscribe((vl) => this.mix = vl);
+    this.getUserName();
+    this.voyageService.numeroSplit({userName: this.username}).subscribe((vl) => localStorage.setItem('numero', vl));
     this.voyageService.readExp().subscribe((vl) => this.exp = vl);
-    this.voyageService.readClient().subscribe((vl) => this.clients = vl);
+    this.voyageService.readClient({userName: this.username}).subscribe((vl) => this.clients = vl);
     this.nullVars();
+  }
+
+  /*******Get the Usename from token*******/
+  getUserName(): void{
+    const token = this.jwt.decodeToken(localStorage.getItem('token'));
+    this.username = token.name;
+    this.voyageService.readMix({userName: this.username})
+      .subscribe((vl) => this.mix = vl);
   }
 
   toggleActions(id): void{
@@ -215,6 +228,7 @@ export class VoyageAddComponent {
       cmtr: this.cmtr,
       expediteur : this.expTable,
       menu: false,
+      userName: this.username
     }
 
     this.voyageService.createMix(data).subscribe(() => this.ngOnInit());
@@ -240,15 +254,16 @@ export class VoyageAddComponent {
   /*******Client Part*******/
   addClient(): void{
     const data = {
-      name: this.clnt
+      name: this.clnt,
+      userName: this.username
     }
     this.voyageService.createClient(data).subscribe(() => {
-        this.ngOnInit();
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Added Succussfuly!!' });
-      });
+      this.ngOnInit();
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Added Succussfuly!!' });
+    }); 
   } 
+  
   /**********Update Part*************/
-
   cancelBtn(): void{
     this.onAdd = false;
     this.onUpdate = false;
@@ -270,6 +285,7 @@ export class VoyageAddComponent {
       cmtr: this.cmtr,
       expediteur : this.expTable,
       menu: false,
+      userName: this.username
     }
 
     this.voyageService.updateMix(data).subscribe(() => this.ngOnInit());
@@ -281,6 +297,7 @@ export class VoyageAddComponent {
 
   /**************Make All the Variables null***************/
   nullVars(): void{
+    this.clnt = '';
     this.dateD = '';
     this.dateDebut = formatDate(this.date, 'MM', 'en-Us') + '/01/' + formatDate(this.date, 'yyyy', 'en-Us');
     this.dateFin = '99/99/9999';
@@ -320,18 +337,19 @@ export class VoyageAddComponent {
       this.dateFin = formatDate(this.dateFin, 'MM/dd/yyyy', 'en-Us');
   
       
-    this.voyageService.readMix()
+    this.voyageService.readMix({userName: this.username})
       .subscribe((value) => this.mix = value.filter((vl) => (
+        vl.userName === this.username &&
         vl.numero.includes(num ? num[0].numero : '') &&
         vl.reference.includes(this.reference) &&
         vl.client.includes(testNull ? '' : this.client.name) &&
-         vl.dateC >= formatDate(String(this.dateDebut), 'MM/dd/yyyy', 'en-Us') && 
-         vl.dateC <= this.dateFin
+        vl.dateC >= formatDate(String(this.dateDebut), 'MM/dd/yyyy', 'en-Us') && 
+        vl.dateC <= this.dateFin
     )));
   }
 
   search(event) {
-    this.voyageService.readMix()
+    this.voyageService.readMix({userName: this.username})
       .subscribe((vl) => this.nmrs = vl.filter((value) => value.numero.includes(event.query)));
   }
 
@@ -340,7 +358,6 @@ export class VoyageAddComponent {
     let time = formatDate(this.date, 'shortTime', 'en-Us');
     let date =  formatDate(this.date, 'fullDate', 'en-Us');
     let fullDate = 'Date:  ' + date + ' ' + time;
-
     let workbook = new Workbook();
 
     // Set cell styles
@@ -371,13 +388,12 @@ export class VoyageAddComponent {
     };
 
     let worksheet = workbook.addWorksheet("voyage");
-
     let titleRow = worksheet.addRow(['Voyages', '', '', '', fullDate]);
     titleRow.font = { family: 4, size: 19, bold: true };
-
     let header = ["Numero", "Date Création", "Date Départ", "Client", "Reference", "Cmr", "Embarquement", "Taxation", "Commentaire"];
-
+    
     const head = worksheet.addRow(header);
+    //style the Row header
     head.eachCell((cell) => {
       cell.font = headerStyle.font;
       cell.alignment = headerStyle.alignment;
@@ -411,7 +427,8 @@ export class VoyageAddComponent {
       {
         temp.push(x1[y]);
       }
-      const vy = worksheet.addRow(temp)
+      const vy = worksheet.addRow(temp);
+      //style the Rows
       vy.eachCell((cell) => {
         cell.font = cellStyle.font;
         cell.alignment = cellStyle.alignment;
@@ -419,7 +436,7 @@ export class VoyageAddComponent {
       })
     }
 
-    let fname="Voyage";
+    let fname = "Voyage";
 
     //add data and file name and download
     workbook.xlsx.writeBuffer().then((data) => {
