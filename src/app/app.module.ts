@@ -48,6 +48,7 @@ import { HeaderComponent } from './digiparc/header/header.component';
 import { AccordionModule } from 'primeng/accordion';
 import { DropdownModule } from 'primeng/dropdown';
 import { TieredMenuModule } from 'primeng/tieredmenu';
+import { PdfTrainingComponent } from './pdf-training/pdf-training.component';
 
 const appRoutes: Routes = [
   {
@@ -95,6 +96,10 @@ const appRoutes: Routes = [
     canActivate: [LoginGuard]
   },
   {
+    path: 'pdf',
+    component: PdfTrainingComponent
+  },
+  {
     path: '**',
     component: Page404Component
   },
@@ -119,6 +124,7 @@ const appRoutes: Routes = [
     HomeComponent,
     VoyageAddComponent,
     HeaderComponent,
+    PdfTrainingComponent,
   ],
   imports: [
     BrowserModule,

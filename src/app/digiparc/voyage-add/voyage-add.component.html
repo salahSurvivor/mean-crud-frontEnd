@@ -105,6 +105,10 @@
                         class="pi pi-ellipsis-v" style="font-size: 1rem"></i>
                     <div *ngIf="mix.menu"  
                         class="menu-actions">
+                        <div (click)="imprimer(mix)">
+                            <i class="pi pi-file-pdf text-danger" style="font-size: 1rem"></i>
+                            <label>Imprimer</label>
+                        </div>
                         <div (click)="showExpDetail(mix.expediteur)" data-bs-toggle="modal" data-bs-target="#showExp">
                             <i class="pi pi-eye text-primary" style="font-size: 1rem"></i>
                             <label>Expediteur</label>
@@ -677,7 +681,7 @@
 </div>
 
 
-
+    
 
 
 
