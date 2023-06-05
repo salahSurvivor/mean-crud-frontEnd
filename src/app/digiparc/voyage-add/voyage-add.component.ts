@@ -18,7 +18,6 @@ import * as jsPDF from 'jspdf';
 /***********Import pdfMake************/
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-import { style } from '@angular/animations';
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
 
 @Component({
@@ -344,7 +343,6 @@ export class VoyageAddComponent {
   }
   
   /************Filter Part************/
-
   onFilter(): void{ 
     let num: any = null;
     let testNull = false;
@@ -632,14 +630,19 @@ export class VoyageAddComponent {
     Capital Social : 100 000 Mad - Compte Attijari RIB : 007640 001492300000002219
     Agrément de tranport N° : 4579/T/30`, 200, 275, 'right');
     doc.text('PATENTE N° : 50473000 - IF N° : 40121960 - RC N° : 43177 - ICE N° : 001565839000088', 203, 90, -90); 
-    doc.save('save.pdf');
 
+    /*If you Want To Move To The Second Page
+    doc.addPage();
+    doc.text('Hello Second Page!!', 10, 10);*/
+
+    doc.save('save.pdf');
     //preview pdf
     /*const pdfDataUri = doc.output('datauristring');
     const newWindow = window.open();
     newWindow.document.write('<iframe src="' + pdfDataUri + '" width="100%" height="100%"></iframe>');*/
   }
 
+  //convert image to base64
   /*onFileSelected(){
     const fileUrl = 'assets/files/logo-digiparc-color.png';
   
